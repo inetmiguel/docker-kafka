@@ -5,7 +5,7 @@ FROM ppc64le/openjdk:8-jre
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV SCALA_VERSION 2.11
-ENV KAFKA_VERSION 2.0.0.0
+ENV KAFKA_VERSION 2.0.0
 #http://apache.mirrors.spacedump.net/kafka/2.0.0/kafka_2.11-2.0.0.tgz
 
 ENV KAFKA_HOME /opt/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION"
@@ -15,7 +15,9 @@ RUN apt-get update && \
     apt-get install -y zookeeper wget supervisor dnsutils procps net-tools && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean && \
-    wget -q http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -O /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz && \
+    echo "" && \
+    curl http://apache.mirrors.spacedump.net/kafka/"$KAFKA_VERSION"/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -o /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz && \
+    echo "" && \
     tar xfz /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz -C /opt && \
     rm /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz
 
