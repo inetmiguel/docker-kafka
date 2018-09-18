@@ -29,7 +29,7 @@ if [ ! -z "$ADVERTISED_PORT" ]; then
     if grep -q "^advertised.port" $KAFKA_HOME/config/server.properties; then
         sed -r -i "s/#(advertised.port)=(.*)/\1=$ADVERTISED_PORT/g" $KAFKA_HOME/config/server.properties
     else
-        echo >> >> $KAFKA_HOME/config/server.properties
+        echo >> $KAFKA_HOME/config/server.properties
         echo "advertised.port=$ADVERTISED_PORT" >> $KAFKA_HOME/config/server.properties
     fi
 fi
