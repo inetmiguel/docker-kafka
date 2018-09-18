@@ -74,13 +74,29 @@ if [ ! -z "$AUTO_CREATE_TOPICS" ]; then
     echo "auto.create.topics.enable=$AUTO_CREATE_TOPICS" >> $KAFKA_HOME/config/server.properties
 fi
 
-
-#Set broker id
+#Start Mike additions
+#set Kafka/Zoo broker ID (1-249, zoo id restrictions)
 if [ ! -z "$BROKER_ID" ]; then
-   echo "setting broker##################################################BEGIN"
-   sed -r -i "s/(broker.id=)0/\1$BROKER_ID/g" $KAFKA_HOME/config/server.properties
-   echo "setting broker##################################################END"
+    echo "setting kafka broker id"
+    sed -r -i "s/(broker.id=)0/\1$BROKER_ID/g" $KAFKA_HOME/config/server.properties
+    echo "$BROKER_ID" > /etc/zookeeper/conf/myid
 fi
+
+# set zookeper leader/election hosts (ports left default, no need to map to host)
+if [ ! -z "$CONTAINER_BASENAME"   ] ;then
+   echo  "" >> /etc/zookeeper/conf/zoo.cfg
+   echo "server.1=${CONTAINER_BASENAME}01:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+   echo "server.2=${CONTAINER_BASENAME}02:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+   echo "server.3=${CONTAINER_BASENAME}03:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+fi
+
+#set Zookeper client port, since this port is published to host 
+if [ ! -z "$ZOO_PORT" ] ;then 
+  echo "Zookeper"
+  sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" $KAFKA_HOME/config/server.properties
+fi
+#End Mike additions
+
 
 # Run Kafka
 $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
