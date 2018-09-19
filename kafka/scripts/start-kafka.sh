@@ -84,9 +84,9 @@ fi
 
 # set zookeper leader/election hosts (ports left default, no need to map to host)
 if [ ! -z "$CONTAINER_BASENAME"   ] ;then
-   sed -r -i "s/(#server.1=)zookeeper1(:2888:3888)/\1${CONTAINER_BASENAME}01\2/g" /etc/zookeeper/conf/zoo.cfg
-   sed -r -i "s/(#server.2=)zookeeper2(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
-   sed -r -i "s/(#server.3=)zookeeper3(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/#(server.1=)zookeeper1(:2888:3888)/\1${CONTAINER_BASENAME}01\2/g" /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/#(server.2=)zookeeper2(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/#(server.3=)zookeeper3(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
    #echo "server.1=${CONTAINER_BASENAME}01:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
    #echo "server.2=${CONTAINER_BASENAME}02:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
    #echo "server.3=${CONTAINER_BASENAME}03:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
