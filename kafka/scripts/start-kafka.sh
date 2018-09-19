@@ -84,20 +84,24 @@ fi
 
 # set zookeper leader/election hosts (ports left default, no need to map to host)
 if [ ! -z "$CONTAINER_BASENAME"   ] ;then
-   echo  "" >> /etc/zookeeper/conf/zoo.cfg
-   echo "server.1=${CONTAINER_BASENAME}01:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
-   echo "server.2=${CONTAINER_BASENAME}02:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
-   echo "server.3=${CONTAINER_BASENAME}03:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/(#server.1=)zookeeper1(:2888:3888)/\1${CONTAINER_BASENAME}01\2/g" /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/(#server.2=)zookeeper2(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
+   sed -r -i "s/(#server.3=)zookeeper3(:2888:3888)/\1${CONTAINER_BASENAME}02\2/g" /etc/zookeeper/conf/zoo.cfg
+   #echo "server.1=${CONTAINER_BASENAME}01:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+   #echo "server.2=${CONTAINER_BASENAME}02:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
+   #echo "server.3=${CONTAINER_BASENAME}03:2888:3888" >> /etc/zookeeper/conf/zoo.cfg
 fi
 
 #set Zookeper client port, since this port is published to host 
 if [ ! -z "$ZOO_PORT" ] ;then 
-  echo "Zookeper"
-  sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" /etc/zookeeper/conf/zoo.cfg
-  sed -r -i "s/(zookeeper.connect=localhost:)2181/\1$ZOO_PORT/g" $KAFKA_HOME/config/server.properties
+    echo "Zookeper port"
+    sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" /etc/zookeeper/conf/zoo.cfg
+    sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" /opt/kafka/config/zookeeper.properties
+    sed -r -i "s/(zookeeper.connect=localhost:)2181/\1$ZOO_PORT/g" $KAFKA_HOME/config/server.properties
 fi
 #End Mike additions
 
 
 # Run Kafka
 $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+
