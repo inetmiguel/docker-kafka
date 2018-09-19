@@ -95,6 +95,7 @@ fi
 #set Zookeper client port, since this port is published to host 
 if [ ! -z "$ZOO_PORT" ] ;then 
     echo "Zookeper port"
+    sed -r -i "s/(hosts=localhost\\:)2181/\1$ZOO_PORT/g" /etc/zookeeper/zooinspector/defaultConnectionSettings.cfg
     sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" /etc/zookeeper/conf/zoo.cfg
     sed -r -i "s/(clientPort=)2181/\1$ZOO_PORT/g" /opt/kafka/config/zookeeper.properties
     sed -r -i "s/(zookeeper.connect=localhost:)2181/\1$ZOO_PORT/g" $KAFKA_HOME/config/server.properties
